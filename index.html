@@ -300,6 +300,11 @@
     </div>
 
     <script>
+        // ডিবাগিং এর জন্য অটো অ্যালার্ট সিস্টেম
+        window.onerror = function(message, source, lineno) {
+            alert("কোডে এরর পাওয়া গেছে!\n" + message + "\nলাইন নম্বর: " + lineno);
+        };
+
         const PIECE_SETS = [
             { id: 'cburnett', name: 'Classic' },
             { id: 'alpha', name: 'Alpha' },
@@ -338,7 +343,7 @@
             gameOver: false,
             pieceIdCounter: 0,
             captured: { white: [], black: [] },
-            showHints: true // নতুন ভেরিয়েবল হিন্টস অন/অফ করার জন্য
+            showHints: true 
         };
 
         const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -371,11 +376,9 @@
                     p.el.style.transform = `translate(${p.c * 100}%, ${p.r * 100}%) ${rotation}`;
                 }
             });
-            
             updateCapturedUI();
         }
 
-        // হিন্টস অন/অফ করার ফাংশন
         function toggleHints() {
             state.showHints = !state.showHints;
             const btn = document.getElementById('hint-btn');
@@ -387,11 +390,12 @@
                 btn.classList.replace('bg-[#2ea043]', 'bg-[#0d1117]');
                 btn.classList.replace('text-white', 'text-gray-400');
             }
-            updateInteractions(); // বোর্ড রিফ্রেশ করবে
+            updateInteractions(); 
         }
 
         function initSettingsUI() {
             const pieceGrid = document.getElementById('piece-set-grid');
+            pieceGrid.innerHTML = ''; // ক্লিয়ার পুরনো ডেটা
             PIECE_SETS.forEach((p, i) => {
                 const btn = document.createElement('div');
                 btn.className = `piece-set-btn bg-[#0d1117] rounded p-2 flex flex-col items-center justify-center ${i === 0 ? 'active' : ''}`;
@@ -408,6 +412,7 @@
             });
 
             const themeGrid = document.getElementById('theme-grid');
+            themeGrid.innerHTML = ''; // ক্লিয়ার পুরনো ডেটা
             BOARD_THEMES.forEach((t, i) => {
                 const btn = document.createElement('div');
                 btn.className = `theme-btn rounded overflow-hidden h-10 flex flex-col ${i === 0 ? 'active' : ''}`;
@@ -430,6 +435,11 @@
         }
 
         function startGame() {
+            if(typeof Chess === 'undefined') {
+                alert("ইন্টারনেট থেকে চেস লজিক লাইব্রেরিটি লোড হতে পারেনি! দয়া করে ইন্টারনেট কানেকশন চেক করে পেজটি রিলোড দিন।");
+                return;
+            }
+            
             state.players.white = document.getElementById('white-name').value || 'সাদা প্লেয়ার';
             state.players.black = document.getElementById('black-name').value || 'কালো প্লেয়ার';
             state.mode = document.getElementById('game-mode').value;
@@ -446,16 +456,4 @@
                 startTimer();
             }
 
-            document.getElementById('setup-modal').style.display = 'none';
-            setupBoard();
-        }
-
-        function setupBoard() {
-            game = new Chess(); 
-            
-            const bgGrid = document.getElementById('bg-grid');
-            const interactGrid = document.getElementById('interact-grid');
-            const piecesLayer = document.getElementById('pieces-layer');
-            
-            bgGrid.innerHTML = '';
-            interactGrid.inn
+            document.getElementBy
